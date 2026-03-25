@@ -10,13 +10,17 @@ import seaborn as sns
 st.set_page_config(page_title="Titanic Survival App", page_icon="🚢", layout="wide")
 
 # PATHS
-base_path = os.path.join("..", "Save pkl File")
+# base_path = os.path.join("..", "Save pkl File")
+base_path = "."
 dataset_path = os.path.join("..", "Dataset", "TitanicAnalysis.csv")
 
 # LOAD MODEL & ARTIFACTS
-model = joblib.load(os.path.join(base_path, "model_kneighbors.pkl"))
-scaler = joblib.load(os.path.join(base_path, "standard_scaler.pkl"))
-feature_columns = joblib.load(os.path.join(base_path, "feature_column.pkl"))
+# model = joblib.load(os.path.join(base_path, "model_kneighbors.pkl"))
+# scaler = joblib.load(os.path.join(base_path, "standard_scaler.pkl"))
+# feature_columns = joblib.load(os.path.join(base_path, "feature_column.pkl"))
+model = joblib.load("model_kneighbors.pkl")
+scaler = joblib.load("standard_scaler.pkl")
+feature_columns = joblib.load("feature_column.pkl")
 MODEL_ACCURACY = 0.82
 
 # SIDEBAR
