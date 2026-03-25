@@ -18,7 +18,7 @@ The goal of this project is to build a classification model that predicts passen
 - 📊 Interactive Dashboard  
 - 🎯 Survival Prediction System  
 - 📈 Exploratory Data Analysis (EDA)  
-- 🧠 Machine Learning Model (KNN)  
+- 🧠 Machine Learning Model  
 - ⚡ Real-time Predictions  
 
 ---
