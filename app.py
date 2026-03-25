@@ -12,7 +12,8 @@ st.set_page_config(page_title="Titanic Survival App", page_icon="🚢", layout="
 # PATHS
 # base_path = os.path.join("..", "Save pkl File")
 base_path = "."
-dataset_path = os.path.join("..", "Dataset", "TitanicAnalysis.csv")
+# dataset_path = os.path.join("..", "Dataset", "TitanicAnalysis.csv")
+dataset_path = "TitanicAnalysis.csv"
 
 # LOAD MODEL & ARTIFACTS
 # model = joblib.load(os.path.join(base_path, "model_kneighbors.pkl"))
