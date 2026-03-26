@@ -10,21 +10,13 @@ import seaborn as sns
 st.set_page_config(page_title="Titanic Survival App", page_icon="🚢", layout="wide")
 
 # PATHS
-# base_path = os.path.join("..", "Save pkl File")
 base_path = "."
-# dataset_path = os.path.join("..", "Dataset", "TitanicAnalysis.csv")
 dataset_path = "TitanicAnalysis.csv"
 
 # LOAD MODEL & ARTIFACTS
-# model = joblib.load(os.path.join(base_path, "model_kneighbors.pkl"))
-# scaler = joblib.load(os.path.join(base_path, "standard_scaler.pkl"))
-# feature_columns = joblib.load(os.path.join(base_path, "feature_column.pkl"))
-# model = joblib.load("model_kneighbors.pkl")
 model = joblib.load("model_rf.pkl")
-# scaler = joblib.load("standard_scaler.pkl")
-# feature_columns = joblib.load("feature_column.pkl")
 feature_columns = joblib.load("feature_column.pkl")
-MODEL_ACCURACY = 0.82
+MODEL_ACCURACY = 0.85+
 
 # SIDEBAR
 st.sidebar.title("🚢 Titanic Navigation")
@@ -58,73 +50,6 @@ if menu == "Dashboard":
     sns.countplot(x="Pclass", hue="Survived", data=df, ax=ax[1])
     ax[1].set_title("Survival by Pclass")
     st.pyplot(fig)
-
-# PREDICTION
-# elif menu == "Prediction":
-#     st.title("🎯 Survival Prediction")
-
-#     col1, col2 = st.columns(2)
-#     with col1:
-#         pclass = st.selectbox("Passenger Class", [1,2,3])
-#         sex = st.selectbox("Sex", ["male","female"])
-#         age = st.slider("Age", 1, 80, 25)
-#         sibsp = st.slider("Siblings/Spouses", 0, 10, 0)
-#         parch = st.slider("Parents/Children", 0, 10, 0)
-#     with col2:
-#         fare = st.slider("Fare", 0.0, 600.0, 50.0)
-#         embarked = st.selectbox("Embarked", ["C","Q","S"])
-#         st.caption("C → Cherbourg (France)")
-#         st.caption("Q → Queenstown (Ireland)")
-#         st.caption("S → Southampton (England)")
-
-#     if st.button("Predict"):
-#     try:
-#         input_data = pd.DataFrame([{
-#             "Pclass": pclass,
-#             "Sex": sex,
-#             "Age": age,
-#             "SibSp": sibsp,
-#             "Parch": parch,
-#             "Fare": fare,
-#             "Embarked": embarked
-#         }])
-
-#         # Encoding (IMPORTANT - CHECK TRAINING SAME)
-#         sex_mapping = {"male":1, "female":0}
-#         embarked_mapping = {"C":0, "Q":1, "S":2}
-
-#         input_data["Sex"] = input_data["Sex"].map(sex_mapping)
-#         input_data["Embarked"] = input_data["Embarked"].map(embarked_mapping)
-
-#         # Feature Engineering
-#         input_data['FamilySize'] = input_data['SibSp'] + input_data['Parch']
-
-#         # 👉 IMPORTANT FIX (NO missing / wrong columns)
-#         for col in feature_columns:
-#             if col not in input_data.columns:
-#                 input_data[col] = 0
-
-#         input_data = input_data[feature_columns]
-
-#         # 👉 DEBUG (optional)
-#         st.write("Input Data:", input_data)
-
-#         # Scaling
-#         input_scaled = scaler.transform(input_data)
-
-#         # Prediction
-#         prediction = model.predict(input_scaled)[0]
-#         probability = model.predict_proba(input_scaled)[0][1]
-
-#         st.divider()
-
-#         if prediction == 1:
-#             st.success(f"🎉 Survived Probability: {probability*100:.2f}%")
-#         else:
-#             st.error(f"❌ Survival Probability: {probability*100:.2f}%")
-
-#     except Exception as e:
-#         st.error(f"Error: {e}")
 
 elif menu == "Prediction":
 
@@ -256,7 +181,7 @@ elif menu == "About":
     """)
 
     st.subheader("🤖 Machine Learning Model")
-    st.write("K-Nearest Neighbors (KNN) Classifier")
+    st.write("Random Forest Classifier")
 
     st.subheader("📈 Model Performance")
     st.write(f"Accuracy: {MODEL_ACCURACY*100:.2f}%")
