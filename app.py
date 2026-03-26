@@ -76,6 +76,7 @@ elif menu == "Prediction":
         st.caption("S → Southampton (England)")
 
     if st.button("Predict"):
+    try:
         input_data = pd.DataFrame([{
             "Pclass": pclass,
             "Sex": sex,
@@ -86,30 +87,42 @@ elif menu == "Prediction":
             "Embarked": embarked
         }])
 
-        # Map categorical to numeric
+        # Encoding (IMPORTANT - CHECK TRAINING SAME)
         sex_mapping = {"male":1, "female":0}
         embarked_mapping = {"C":0, "Q":1, "S":2}
+
         input_data["Sex"] = input_data["Sex"].map(sex_mapping)
         input_data["Embarked"] = input_data["Embarked"].map(embarked_mapping)
 
-        # Add derived column FamilySize
+        # Feature Engineering
         input_data['FamilySize'] = input_data['SibSp'] + input_data['Parch']
 
-        # Ensure column order
+        # 👉 IMPORTANT FIX (NO missing / wrong columns)
+        for col in feature_columns:
+            if col not in input_data.columns:
+                input_data[col] = 0
+
         input_data = input_data[feature_columns]
 
-        # Scale
+        # 👉 DEBUG (optional)
+        st.write("Input Data:", input_data)
+
+        # Scaling
         input_scaled = scaler.transform(input_data)
 
-        # Predict
+        # Prediction
         prediction = model.predict(input_scaled)[0]
         probability = model.predict_proba(input_scaled)[0][1]
 
         st.divider()
+
         if prediction == 1:
             st.success(f"🎉 Survived Probability: {probability*100:.2f}%")
         else:
             st.error(f"❌ Survival Probability: {probability*100:.2f}%")
+
+    except Exception as e:
+        st.error(f"Error: {e}")
 
 # EDA
 elif menu == "EDA":
