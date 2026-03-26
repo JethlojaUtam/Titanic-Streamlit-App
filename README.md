@@ -21,13 +21,16 @@ Streamlit Documentation
 ## 📸 Screenshots
 
 ### 📊 Dashboard
-<img width="1920" height="1080" alt="1dashboard" src="https://github.com/user-attachments/assets/47828460-a346-44c1-a402-d076ac29b2b2" />
+<img width="1920" height="950" alt="1dashboard" src="https://github.com/user-attachments/assets/6a8c6018-9843-43fe-ae64-b47f40b2e85b" />
 <img width="1887" height="366" alt="2dashboard" src="https://github.com/user-attachments/assets/2def416e-f4d4-4335-8d6a-3fee92754f51" />
+
 ### 🎯 Prediction
 <img width="1896" height="900" alt="3prediction" src="https://github.com/user-attachments/assets/559720ef-5fba-4501-a7e1-ff8e06371120" />
 <img width="1911" height="903" alt="4prediction" src="https://github.com/user-attachments/assets/900364c0-b889-4e2f-bfb7-68a44642bb8d" />
+
 ### ℹ️ About
 <img width="1913" height="889" alt="5about" src="https://github.com/user-attachments/assets/0a11422c-5620-4920-a245-a4f341931d85" />
+
 
 ---
 
