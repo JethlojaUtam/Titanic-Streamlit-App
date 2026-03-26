@@ -19,8 +19,10 @@ dataset_path = "TitanicAnalysis.csv"
 # model = joblib.load(os.path.join(base_path, "model_kneighbors.pkl"))
 # scaler = joblib.load(os.path.join(base_path, "standard_scaler.pkl"))
 # feature_columns = joblib.load(os.path.join(base_path, "feature_column.pkl"))
-model = joblib.load("model_kneighbors.pkl")
+# model = joblib.load("model_kneighbors.pkl")
+model = joblib.load("model_rf.pkl")
 scaler = joblib.load("standard_scaler.pkl")
+# feature_columns = joblib.load("feature_column.pkl")
 feature_columns = joblib.load("feature_column.pkl")
 MODEL_ACCURACY = 0.82
 
@@ -58,71 +60,136 @@ if menu == "Dashboard":
     st.pyplot(fig)
 
 # PREDICTION
+# elif menu == "Prediction":
+#     st.title("🎯 Survival Prediction")
+
+#     col1, col2 = st.columns(2)
+#     with col1:
+#         pclass = st.selectbox("Passenger Class", [1,2,3])
+#         sex = st.selectbox("Sex", ["male","female"])
+#         age = st.slider("Age", 1, 80, 25)
+#         sibsp = st.slider("Siblings/Spouses", 0, 10, 0)
+#         parch = st.slider("Parents/Children", 0, 10, 0)
+#     with col2:
+#         fare = st.slider("Fare", 0.0, 600.0, 50.0)
+#         embarked = st.selectbox("Embarked", ["C","Q","S"])
+#         st.caption("C → Cherbourg (France)")
+#         st.caption("Q → Queenstown (Ireland)")
+#         st.caption("S → Southampton (England)")
+
+#     if st.button("Predict"):
+#     try:
+#         input_data = pd.DataFrame([{
+#             "Pclass": pclass,
+#             "Sex": sex,
+#             "Age": age,
+#             "SibSp": sibsp,
+#             "Parch": parch,
+#             "Fare": fare,
+#             "Embarked": embarked
+#         }])
+
+#         # Encoding (IMPORTANT - CHECK TRAINING SAME)
+#         sex_mapping = {"male":1, "female":0}
+#         embarked_mapping = {"C":0, "Q":1, "S":2}
+
+#         input_data["Sex"] = input_data["Sex"].map(sex_mapping)
+#         input_data["Embarked"] = input_data["Embarked"].map(embarked_mapping)
+
+#         # Feature Engineering
+#         input_data['FamilySize'] = input_data['SibSp'] + input_data['Parch']
+
+#         # 👉 IMPORTANT FIX (NO missing / wrong columns)
+#         for col in feature_columns:
+#             if col not in input_data.columns:
+#                 input_data[col] = 0
+
+#         input_data = input_data[feature_columns]
+
+#         # 👉 DEBUG (optional)
+#         st.write("Input Data:", input_data)
+
+#         # Scaling
+#         input_scaled = scaler.transform(input_data)
+
+#         # Prediction
+#         prediction = model.predict(input_scaled)[0]
+#         probability = model.predict_proba(input_scaled)[0][1]
+
+#         st.divider()
+
+#         if prediction == 1:
+#             st.success(f"🎉 Survived Probability: {probability*100:.2f}%")
+#         else:
+#             st.error(f"❌ Survival Probability: {probability*100:.2f}%")
+
+#     except Exception as e:
+#         st.error(f"Error: {e}")
+
 elif menu == "Prediction":
     st.title("🎯 Survival Prediction")
 
     col1, col2 = st.columns(2)
+
     with col1:
         pclass = st.selectbox("Passenger Class", [1,2,3])
         sex = st.selectbox("Sex", ["male","female"])
         age = st.slider("Age", 1, 80, 25)
         sibsp = st.slider("Siblings/Spouses", 0, 10, 0)
         parch = st.slider("Parents/Children", 0, 10, 0)
+
     with col2:
         fare = st.slider("Fare", 0.0, 600.0, 50.0)
         embarked = st.selectbox("Embarked", ["C","Q","S"])
-        st.caption("C → Cherbourg (France)")
-        st.caption("Q → Queenstown (Ireland)")
-        st.caption("S → Southampton (England)")
+
+        st.caption("C → Cherbourg")
+        st.caption("Q → Queenstown")
+        st.caption("S → Southampton")
 
     if st.button("Predict"):
-    try:
-        input_data = pd.DataFrame([{
-            "Pclass": pclass,
-            "Sex": sex,
-            "Age": age,
-            "SibSp": sibsp,
-            "Parch": parch,
-            "Fare": fare,
-            "Embarked": embarked
-        }])
+        try:
+            # Create DataFrame
+            input_data = pd.DataFrame([{
+                "Pclass": pclass,
+                "Sex": sex,
+                "Age": age,
+                "SibSp": sibsp,
+                "Parch": parch,
+                "Fare": fare,
+                "Embarked": embarked
+            }])
 
-        # Encoding (IMPORTANT - CHECK TRAINING SAME)
-        sex_mapping = {"male":1, "female":0}
-        embarked_mapping = {"C":0, "Q":1, "S":2}
+            # Encoding (MUST MATCH TRAINING)
+            sex_mapping = {"male":1, "female":0}
+            embarked_mapping = {"C":0, "Q":1, "S":2}
 
-        input_data["Sex"] = input_data["Sex"].map(sex_mapping)
-        input_data["Embarked"] = input_data["Embarked"].map(embarked_mapping)
+            input_data["Sex"] = input_data["Sex"].map(sex_mapping)
+            input_data["Embarked"] = input_data["Embarked"].map(embarked_mapping)
 
-        # Feature Engineering
-        input_data['FamilySize'] = input_data['SibSp'] + input_data['Parch']
+            # Feature Engineering (IMPORTANT)
+            input_data["FamilySize"] = input_data["SibSp"] + input_data["Parch"]
 
-        # 👉 IMPORTANT FIX (NO missing / wrong columns)
-        for col in feature_columns:
-            if col not in input_data.columns:
-                input_data[col] = 0
+            # Ensure all columns exist
+            for col in feature_columns:
+                if col not in input_data.columns:
+                    input_data[col] = 0
 
-        input_data = input_data[feature_columns]
+            # Correct column order
+            input_data = input_data[feature_columns]
 
-        # 👉 DEBUG (optional)
-        st.write("Input Data:", input_data)
+            # Prediction (NO SCALING)
+            prediction = model.predict(input_data)[0]
+            probability = model.predict_proba(input_data)[0][1]
 
-        # Scaling
-        input_scaled = scaler.transform(input_data)
+            st.divider()
 
-        # Prediction
-        prediction = model.predict(input_scaled)[0]
-        probability = model.predict_proba(input_scaled)[0][1]
+            if prediction == 1:
+                st.success(f"🎉 Survived Probability: {probability*100:.2f}%")
+            else:
+                st.error(f"❌ Survival Probability: {probability*100:.2f}%")
 
-        st.divider()
-
-        if prediction == 1:
-            st.success(f"🎉 Survived Probability: {probability*100:.2f}%")
-        else:
-            st.error(f"❌ Survival Probability: {probability*100:.2f}%")
-
-    except Exception as e:
-        st.error(f"Error: {e}")
+        except Exception as e:
+            st.error(f"Error: {e}")
 
 # EDA
 elif menu == "EDA":
