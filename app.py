@@ -20,8 +20,8 @@ dataset_path = "TitanicAnalysis.csv"
 # scaler = joblib.load(os.path.join(base_path, "standard_scaler.pkl"))
 # feature_columns = joblib.load(os.path.join(base_path, "feature_column.pkl"))
 # model = joblib.load("model_kneighbors.pkl")
-model = joblib.load("model_random.pkl")
-scaler = joblib.load("standard_scaler.pkl")
+model = joblib.load("model_rf.pkl")
+# scaler = joblib.load("standard_scaler.pkl")
 # feature_columns = joblib.load("feature_column.pkl")
 feature_columns = joblib.load("feature_column.pkl")
 MODEL_ACCURACY = 0.82
@@ -127,28 +127,35 @@ if menu == "Dashboard":
 #         st.error(f"Error: {e}")
 
 elif menu == "Prediction":
-    st.title("🎯 Survival Prediction")
+
+    st.title("🎯 Titanic Survival Prediction")
 
     col1, col2 = st.columns(2)
 
     with col1:
-        pclass = st.selectbox("Passenger Class", [1,2,3])
-        sex = st.selectbox("Sex", ["male","female"])
+        pclass = st.selectbox("Passenger Class", [1, 2, 3])
+        sex = st.selectbox("Sex", ["male", "female"])
         age = st.slider("Age", 1, 80, 25)
         sibsp = st.slider("Siblings/Spouses", 0, 10, 0)
         parch = st.slider("Parents/Children", 0, 10, 0)
 
     with col2:
         fare = st.slider("Fare", 0.0, 600.0, 50.0)
-        embarked = st.selectbox("Embarked", ["C","Q","S"])
+        embarked = st.selectbox("Embarked", ["C", "Q", "S"])
 
         st.caption("C → Cherbourg")
         st.caption("Q → Queenstown")
         st.caption("S → Southampton")
 
+    # =========================
+    # PREDICT BUTTON
+    # =========================
     if st.button("Predict"):
+
         try:
-            # Create DataFrame
+            # ------------------------
+            # CREATE INPUT
+            # ------------------------
             input_data = pd.DataFrame([{
                 "Pclass": pclass,
                 "Sex": sex,
@@ -159,25 +166,33 @@ elif menu == "Prediction":
                 "Embarked": embarked
             }])
 
-            # Encoding (MUST MATCH TRAINING)
-            sex_mapping = {"male":1, "female":0}
-            embarked_mapping = {"C":0, "Q":1, "S":2}
+            # ------------------------
+            # ENCODING
+            # ------------------------
+            input_data["Sex"] = input_data["Sex"].map({"male":1, "female":0})
+            input_data["Embarked"] = input_data["Embarked"].map({"C":0, "Q":1, "S":2})
 
-            input_data["Sex"] = input_data["Sex"].map(sex_mapping)
-            input_data["Embarked"] = input_data["Embarked"].map(embarked_mapping)
-
-            # Feature Engineering (IMPORTANT)
+            # ------------------------
+            # FEATURE ENGINEERING
+            # ------------------------
             input_data["FamilySize"] = input_data["SibSp"] + input_data["Parch"]
 
-            # Ensure all columns exist
+            input_data["IsAlone"] = 1
+            if input_data["FamilySize"][0] > 0:
+                input_data["IsAlone"] = 0
+
+            # ------------------------
+            # MATCH COLUMNS
+            # ------------------------
             for col in feature_columns:
                 if col not in input_data.columns:
                     input_data[col] = 0
 
-            # Correct column order
             input_data = input_data[feature_columns]
 
-            # Prediction (NO SCALING)
+            # ------------------------
+            # PREDICTION
+            # ------------------------
             prediction = model.predict(input_data)[0]
             probability = model.predict_proba(input_data)[0][1]
 
