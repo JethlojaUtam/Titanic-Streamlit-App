@@ -177,9 +177,10 @@ elif menu == "Prediction":
             # ------------------------
             input_data["FamilySize"] = input_data["SibSp"] + input_data["Parch"]
 
-            input_data["IsAlone"] = 1
-            if input_data["FamilySize"][0] > 0:
-                input_data["IsAlone"] = 0
+            # input_data["IsAlone"] = 1
+            # if input_data["FamilySize"][0] > 0:
+            #     input_data["IsAlone"] = 0
+            input_data["IsAlone"] = (input_data["FamilySize"] == 0).astype(int)
 
             # ------------------------
             # MATCH COLUMNS
