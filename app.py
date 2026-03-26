@@ -16,7 +16,7 @@ dataset_path = "TitanicAnalysis.csv"
 # LOAD MODEL & ARTIFACTS
 model = joblib.load("model_rf.pkl")
 feature_columns = joblib.load("feature_column.pkl")
-MODEL_ACCURACY = 0.85+
+MODEL_ACCURACY = 0.85
 
 # SIDEBAR
 st.sidebar.title("🚢 Titanic Navigation")
