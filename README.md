@@ -22,7 +22,6 @@ Streamlit Documentation
 
 ### 📊 Dashboard
 <img width="1920" height="950" alt="1dashboard" src="https://github.com/user-attachments/assets/2a47bbf1-22fa-4b6f-bb71-b53330939406" />
-<img width="1887" height="366" alt="2dashboard" src="https://github.com/user-attachments/assets/2def416e-f4d4-4335-8d6a-3fee92754f51" />
 
 ### 🎯 Prediction
 <img width="1896" height="900" alt="3prediction" src="https://github.com/user-attachments/assets/559720ef-5fba-4501-a7e1-ff8e06371120" />
